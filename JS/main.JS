@@ -23,12 +23,7 @@ while (continuar === true) {
 return filas;
 }
 
-// Calcular el promedio de productividad
-function calcularPromedio(filas){
-    const suma = filas.reduce((acc, fila) => acc + fila.produccion, 0);
-    const promedio = suma / filas.length;
-    return promedio;
-}
+
 
 //Encontrar la fila mas productiva
 function mejorFila(filas) {
@@ -67,7 +62,7 @@ function mostrarProductivosYNoProducctivos(filas) {
     let noproductivos = [];
 
     filas.forEach((fila) => {
-        if (fila.produccion >= 100) {
+        if (fila.produccion >= 50) {
             productivos.push(fila);
         } else {
             noproductivos.push(fila);
@@ -76,12 +71,12 @@ function mostrarProductivosYNoProducctivos(filas) {
 
     console.log("<-- Filas mas productivas -->");
     productivos.forEach((fila) => {
-        console.log("Fila N°" + fila.numfila + "cantidad producida" + fila.produccion);
+        console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion);
     })
 
     console.log("<-- Filas menos productivas -->");
     noproductivos.forEach((fila) => {
-        console.log("Fila N°" + fila.numfila + "cantidad producida" + fila.produccion);
+        console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion);
     })
 }
 
@@ -94,19 +89,17 @@ function sistemaDeProductividad() {
         return;
     }
 
-    const promedio = calcularPromedio(filaprodu);
-    const mejores = mejorFila(filaprodu);
+    
     const peores = peorFila(filaprodu);
+    const mejores = mejorFila(filaprodu);
 
-    console.log("<-- Promedio de Produccion -->");
-    console.log(promedio.toFixed(2));
+    
 
     console.log("<-- Mejores Filas -->");
-    mejores.forEach((fila) => console.log("Fila N°" + fila.numfila + "cantidad producida" + fila.produccion));
+    mejores.forEach((fila) => console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion));
 
     console.log("<-- Peores Filas -->");
-    peores.forEach((fila) => console.log("Fila N°" + fila.numfila + "cantidad producida" + fila.produccion))
-    console.table(peores);
+    peores.forEach((fila) => console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion))
     
     mostrarProductivosYNoProducctivos(filaprodu);
 
