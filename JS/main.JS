@@ -1,108 +1,90 @@
-// Ingresar las n° de fila de produccion y el numero de empleados trabajando en ella
-function ingresarFilaProduccion(){
-let filas = [];
-let continuar = true;
+// Función para ingresar las filas de producción usando prompts
+function ingresarFilasProduccion() {
+    let filas = [];
+    let continuar = true;
 
-while (continuar === true) {
-    const numfila = prompt("Ingresar el N° de la fila.");
-    const produccion = prompt("Ingresar la cantidad Producida.");
+    while (continuar) {
+        const numFila = prompt("Ingresar el N° de la fila:");
+        const produccion = prompt("Ingresar la cantidad producida:");
 
-    if(isNaN(produccion)){
-        alert("Ingresar una cantidad numerica valida.");
-    } else{
-        filas.push({numfila: numfila, produccion: produccion});
-    }
-
-    const respuesta = prompt("¿Quiere agregar otra Fila? Si/No").toLowerCase();
-    if(respuesta === "si") {
-        continuar = true;
-    } else{
-        continuar = false;
-    }
-}
-return filas;
-}
-
-
-
-//Encontrar la fila mas productiva
-function mejorFila(filas) {
-    let mejorProduccion = filas[0].produccion;
-
-        filas.forEach(fila => {
-        if (fila.produccion > mejorProduccion) {
-            mejorProduccion = fila.produccion;
-        }
-    });
-
-    let mejores = filas.filter((fila) => fila.produccion === mejorProduccion);
-
-    return mejores;
-}
-
-// Encontrar la fila menos producctiva
-function peorFila(filas) {
-
-    let peorFila = filas[0].produccion;
-
-    filas.forEach(fila => {
-        if (fila.produccion < peorFila) {
-            peorFila = fila.produccion;
-        }
-    });
-
-    let peores = filas.filter((fila) => fila.produccion === peorFila);
-
-    return peores;
-}
-
-// Mostrar Produccion Alta y Produccion Baja
-function mostrarProductivosYNoProducctivos(filas) {
-    let productivos = [];
-    let noproductivos = [];
-
-    filas.forEach((fila) => {
-        if (fila.produccion >= 50) {
-            productivos.push(fila);
+        // Validar que la producción sea un número válido
+        if (isNaN(produccion) || produccion < 0) {
+            console.log("Por favor, ingrese una cantidad numérica válida y mayor o igual a 0.");
         } else {
-            noproductivos.push(fila);
+            filas.push({ numFila: numFila, produccion: parseFloat(produccion) });
         }
-    });
 
-    console.log("<-- Filas mas productivas -->");
-    productivos.forEach((fila) => {
-        console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion);
-    })
+        // Preguntar si se quiere agregar otra fila
+        const respuesta = prompt("¿Quiere agregar otra fila? (Si/No)").toLowerCase();
+        continuar = respuesta === 'si';
+    }
+
+    return filas;
+}
+
+// Función para encontrar la(s) fila(s) más productiva(s)
+function encontrarMejorFila(filas) {
+    const maxProduccion = Math.max(...filas.map(fila => fila.produccion));
+    return filas.filter(fila => fila.produccion === maxProduccion);
+}
+
+// Función para encontrar la(s) fila(s) menos productiva(s)
+function encontrarPeorFila(filas) {
+    const minProduccion = Math.min(...filas.map(fila => fila.produccion));
+    return filas.filter(fila => fila.produccion === minProduccion);
+}
+
+// Función para mostrar filas productivas y no productivas
+function mostrarFilasPorProductividad(filas) {
+    const productivos = filas.filter(fila => fila.produccion >= 50);
+    const noProductivos = filas.filter(fila => fila.produccion < 50);
+
+    console.log("<-- Filas más productivas -->");
+    productivos.forEach(fila => {
+        console.log(`Fila N° ${fila.numFila} - Cantidad producida: ${fila.produccion}`);
+    });
 
     console.log("<-- Filas menos productivas -->");
-    noproductivos.forEach((fila) => {
-        console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion);
-    })
+    noProductivos.forEach(fila => {
+        console.log(`Fila N° ${fila.numFila} - Cantidad producida: ${fila.produccion}`);
+    });
 }
 
-// Función principal
-function sistemaDeProductividad() {
-    const filaprodu = ingresarFilaProduccion();
+// Función para calcular el promedio de producción
+function calcularPromedioProduccion(filas) {
+    const totalProduccion = filas.reduce((sum, fila) => sum + fila.produccion, 0);
+    const promedio = totalProduccion / filas.length;
+    return promedio;
+}
 
-    if (filaprodu.length === 0) {
-        console.log("No hay Filas");
+// Función principal del sistema de productividad
+function sistemaDeProductividad() {
+    const filasProduccion = ingresarFilasProduccion();
+
+    if (filasProduccion.length === 0) {
+        console.log("No se ingresaron filas de producción.");
         return;
     }
 
-    
-    const peores = peorFila(filaprodu);
-    const mejores = mejorFila(filaprodu);
-
-    
+    const mejoresFilas = encontrarMejorFila(filasProduccion);
+    const peoresFilas = encontrarPeorFila(filasProduccion);
 
     console.log("<-- Mejores Filas -->");
-    mejores.forEach((fila) => console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion));
+    mejoresFilas.forEach(fila => {
+        console.log(`Fila N° ${fila.numFila} - Producción: ${fila.produccion}`);
+    });
 
     console.log("<-- Peores Filas -->");
-    peores.forEach((fila) => console.log("Fila N° " + fila.numfila + " cantidad producida " + fila.produccion))
-    
-    mostrarProductivosYNoProducctivos(filaprodu);
+    peoresFilas.forEach(fila => {
+        console.log(`Fila N° ${fila.numFila} - Producción: ${fila.produccion}`);
+    });
 
+    mostrarFilasPorProductividad(filasProduccion);
+
+    // Calcular y mostrar el promedio de producción
+    const promedioProduccion = calcularPromedioProduccion(filasProduccion);
+    console.log(`Promedio de producción total: ${promedioProduccion.toFixed(2)}`);
 }
 
+// Ejecutar sistema
 sistemaDeProductividad();
